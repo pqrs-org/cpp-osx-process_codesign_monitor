@@ -1,0 +1,34 @@
+name: process_codesign_test_helper
+
+options:
+  deploymentTarget:
+    macOS: '13.0'
+
+settings:
+  base:
+    ARCHS: arm64 x86_64
+    CODE_SIGNING_ALLOWED: 'NO'
+    ENABLE_HARDENED_RUNTIME: 'YES'
+    INFOPLIST_FILE: Info.plist
+    MACOSX_DEPLOYMENT_TARGET: '13.0'
+    ONLY_ACTIVE_ARCH: 'NO'
+    PRODUCT_BUNDLE_IDENTIFIER: org.pqrs.Karabiner-Elements.ProcessCodesignTestHelper
+    PRODUCT_NAME: process_codesign_test_helper
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: 'YES'
+
+targets:
+  process_codesign_test_helper_a:
+    type: application
+    platform: macOS
+    sources:
+      - main.swift
+    settings:
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: PROCESS_CODESIGN_TEST_HELPER_A
+
+  process_codesign_test_helper_b:
+    type: application
+    platform: macOS
+    sources:
+      - main.swift
+    settings:
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: PROCESS_CODESIGN_TEST_HELPER_B
