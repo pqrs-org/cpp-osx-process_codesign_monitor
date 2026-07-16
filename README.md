@@ -11,7 +11,7 @@ cpp-osx-process_codesign_monitor depends on the following libraries.
 
 - [Nod](https://github.com/fr00b0/nod)
 - [pqrs::dispatcher](https://github.com/pqrs-org/cpp-dispatcher)
-- [pqrs::osx::codesign](https://github.com/pqrs-org/cpp-osx-codesign) and its dependencies
+- [pqrs::osx::codesign](https://github.com/pqrs-org/cpp-osx-codesign)
 
 ## Install
 
