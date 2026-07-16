@@ -1,6 +1,6 @@
 #pragma once
 
-// pqrs::osx::process_codesign_monitor v0.0.0
+// pqrs::osx::process_codesign_monitor v1.0.0
 
 // (C) Copyright Takayama Fumihiko 2026.
 // Distributed under the Boost Software License, Version 1.0.
