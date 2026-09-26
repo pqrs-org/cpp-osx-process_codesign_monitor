@@ -3,6 +3,7 @@
 #include <mutex>
 #include <pqrs/dispatcher.hpp>
 #include <pqrs/osx/process_codesign_monitor.hpp>
+#include <stdexcept>
 
 namespace {
 class team_id_provider final {
@@ -73,6 +74,17 @@ int main() {
   using namespace boost::ut::literals;
 
   pqrs::dispatcher::extra::initialize_shared_dispatcher();
+
+  "constructor provider exception"_test = [] {
+    expect(throws<std::runtime_error>([] {
+      pqrs::osx::process_codesign_monitor monitor(
+          []() -> std::optional<pqrs::osx::codesign::team_id> {
+            throw std::runtime_error("provider initialization failed");
+          },
+          std::chrono::hours(1),
+          3);
+    }));
+  };
 
   "three consecutive failures"_test = [] {
     auto expected_team_id = pqrs::osx::codesign::team_id("TEAMID");

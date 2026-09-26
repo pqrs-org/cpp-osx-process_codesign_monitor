@@ -16,6 +16,10 @@
 
 namespace pqrs::osx {
 class process_codesign_monitor final : public pqrs::dispatcher::extra::dispatcher_client {
+private:
+  // Keep the guard first so member initialization failures also detach.
+  pqrs::dispatcher::extra::dispatcher_client_constructor_exception_guard dispatcher_client_constructor_exception_guard_{*this};
+
 public:
   using team_id_provider = std::function<std::optional<pqrs::osx::codesign::team_id>()>;
 
@@ -40,11 +44,12 @@ public:
   process_codesign_monitor(team_id_provider team_id_provider,
                            pqrs::dispatcher::duration interval,
                            int required_consecutive_failures)
-      : timer_(*this),
-        team_id_provider_(std::move(team_id_provider)),
+      : team_id_provider_(std::move(team_id_provider)),
         interval_(interval),
         required_consecutive_failures_(required_consecutive_failures),
-        initial_team_id_(team_id_provider_()) {
+        initial_team_id_(team_id_provider_()),
+        timer_(*this) {
+    dispatcher_client_constructor_exception_guard_.initialize();
   }
 
   ~process_codesign_monitor() override {
@@ -101,12 +106,13 @@ private:
     }
   }
 
-  pqrs::dispatcher::extra::timer timer_;
   team_id_provider team_id_provider_;
   pqrs::dispatcher::duration interval_;
   int required_consecutive_failures_;
   std::optional<pqrs::osx::codesign::team_id> initial_team_id_;
   int consecutive_failures_ = 0;
   bool notified_ = false;
+  // Construct after potentially throwing members; destruction requires detach.
+  pqrs::dispatcher::extra::timer timer_;
 };
 } // namespace pqrs::osx
