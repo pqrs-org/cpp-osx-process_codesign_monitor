@@ -1,6 +1,7 @@
 #include <csignal>
 #include <iostream>
 #include <pqrs/dispatcher.hpp>
+#include <pqrs/osx/autorelease_pool.hpp>
 #include <pqrs/osx/process_codesign_monitor.hpp>
 #include <pqrs/thread_wait.hpp>
 
@@ -13,7 +14,8 @@ int main() {
     global_wait->notify();
   });
 
-  pqrs::dispatcher::extra::initialize_shared_dispatcher();
+  pqrs::dispatcher::extra::initialize_shared_dispatcher(
+      pqrs::osx::autorelease_pool::execute_with_autorelease_pool);
 
   {
     // The default constructor monitors the current process every second
